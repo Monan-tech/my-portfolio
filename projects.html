@@ -1,0 +1,282 @@
+<!DOCTYPE html>
+<html lang="en" x-data="projects()" :class="{'dark':dark}" x-init="init()" class="scroll-smooth">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Projects — Raymond</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
+  <link href="https://fonts.googleapis.com/css2?family=PT+Sans:ital,wght@0,400;0,700;1,400&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500&display=swap" rel="stylesheet"/>
+  <script>tailwind.config={darkMode:'class',theme:{extend:{fontFamily:{display:['PT Sans','sans-serif'],body:['DM Sans','sans-serif']},colors:{accent:'#FF6B2B','accent-light':'#FF8F5C'}}}}</script>
+  <style>
+    *,*::before,*::after{box-sizing:border-box;}
+    html{font-family:'DM Sans',sans-serif;}
+    h1,h2,h3,h4,h5,h6{font-family:'PT Sans',sans-serif;}
+    .reveal{opacity:0;transform:translateY(22px);transition:opacity .55s cubic-bezier(.4,0,.2,1),transform .55s cubic-bezier(.4,0,.2,1);}
+    .reveal.visible{opacity:1;transform:translateY(0);}
+    .nav-link{position:relative;}
+    .nav-link::after{content:'';position:absolute;bottom:-2px;left:0;width:0;height:1.5px;background:currentColor;transition:width .25s cubic-bezier(.4,0,.2,1);}
+    .nav-link:hover::after{width:100%;}
+    ::-webkit-scrollbar{width:5px;}::-webkit-scrollbar-track{background:transparent;}::-webkit-scrollbar-thumb{background:#FF6B2B;border-radius:99px;}
+    body{transition:background-color .3s,color .3s;}
+    body::before{content:'';position:fixed;inset:0;background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");pointer-events:none;z-index:0;opacity:.4;}
+    .btn-primary{position:relative;overflow:hidden;}
+    .btn-primary::after{content:'';position:absolute;top:0;left:-100%;width:60%;height:100%;background:rgba(255,255,255,.18);transform:skewX(-20deg);transition:left .4s cubic-bezier(.4,0,.2,1);}
+    .btn-primary:hover::after{left:160%;}
+    [x-cloak]{display:none!important;}
+    .photo-frame{position:relative;overflow:hidden;background:#e4e4e7;}
+    .photo-frame img{width:100%;height:100%;object-fit:cover;display:block;}
+    .project-card{transition:transform .3s cubic-bezier(.4,0,.2,1),border-color .2s;}
+    .project-card:hover{transform:translateY(-4px);}
+  </style>
+</head>
+<body class="bg-white dark:bg-zinc-950 text-zinc-900 dark:text-zinc-100 font-body antialiased">
+
+  <header class="fixed top-0 left-0 right-0 z-50 transition-all duration-300"
+    :class="scrolled?'bg-white/90 dark:bg-zinc-950/90 backdrop-blur-md shadow-sm shadow-black/5':'bg-transparent'">
+    <nav class="max-w-6xl mx-auto px-6 h-16 flex items-center justify-between">
+      <a href="index.html" class="font-display font-bold text-xl tracking-tight z-10">
+        <span class="text-zinc-900 dark:text-white">Raymond&nbsp;</span><span class="text-accent">Bentoy</span>
+      </a>
+      <ul class="hidden md:flex items-center gap-8 text-sm font-medium">
+        <li><a href="index.html#services" class="nav-link text-zinc-600 dark:text-zinc-400 hover:text-zinc-900 dark:hover:text-white transition-colors">Services</a></li>
+        <li><a href="projects.html" class="nav-link text-accent font-medium">Work</a></li>
+        <li><a href="index.html#about" class="nav-link text-zinc-600 dark:text-zinc-400 hover:text-zinc-900 dark:hover:text-white transition-colors">About</a></li>
+        <li><a href="index.html#product" class="nav-link text-zinc-600 dark:text-zinc-400 hover:text-zinc-900 dark:hover:text-white transition-colors">Product</a></li>
+        <li><a href="index.html#contact" class="nav-link text-zinc-600 dark:text-zinc-400 hover:text-zinc-900 dark:hover:text-white transition-colors">Contact</a></li>
+      </ul>
+      <div class="flex items-center gap-3">
+        <button @click="dark=!dark;localStorage.setItem('theme',dark?'dark':'light')" class="w-9 h-9 flex items-center justify-center rounded-full border border-zinc-200 dark:border-zinc-800 hover:bg-zinc-100 dark:hover:bg-zinc-800 transition-colors" :aria-label="dark?'Light mode':'Dark mode'">
+          <svg x-show="!dark" xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 12.79A9 9 0 1111.21 3 7 7 0 0021 12.79z"/></svg>
+          <svg x-show="dark" xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364-6.364l-.707.707M6.343 17.657l-.707.707M17.657 17.657l-.707-.707M6.343 6.343l-.707-.707M12 8a4 4 0 100 8 4 4 0 000-8z"/></svg>
+        </button>
+        <a href="index.html#contact" class="hidden md:inline-flex items-center gap-2 btn-primary bg-accent text-white text-sm font-medium px-5 py-2 rounded-full hover:bg-accent-light transition-colors">Hire me &rarr;</a>
+        <button @click="mobileMenu=!mobileMenu" class="md:hidden w-9 h-9 flex items-center justify-center rounded-full border border-zinc-200 dark:border-zinc-800" aria-label="Toggle menu">
+          <svg x-show="!mobileMenu" xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/></svg>
+          <svg x-show="mobileMenu" xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
+        </button>
+      </div>
+    </nav>
+    <div x-show="mobileMenu" x-cloak x-transition:enter="transition ease-out duration-200" x-transition:enter-start="opacity-0 -translate-y-2" x-transition:enter-end="opacity-100 translate-y-0" x-transition:leave="transition ease-in duration-150" x-transition:leave-start="opacity-100 translate-y-0" x-transition:leave-end="opacity-0 -translate-y-2" class="md:hidden bg-white dark:bg-zinc-950 border-t border-zinc-100 dark:border-zinc-900">
+      <ul class="flex flex-col px-6 py-4 gap-4 text-sm font-medium">
+        <li><a href="index.html#services" @click="mobileMenu=false" class="block text-zinc-700 dark:text-zinc-300">Services</a></li>
+        <li><a href="projects.html" class="block text-accent font-medium">Work</a></li>
+        <li><a href="index.html#about" @click="mobileMenu=false" class="block text-zinc-700 dark:text-zinc-300">About</a></li>
+        <li><a href="index.html#product" @click="mobileMenu=false" class="block text-zinc-700 dark:text-zinc-300">Product</a></li>
+        <li><a href="index.html#contact" @click="mobileMenu=false" class="block text-zinc-700 dark:text-zinc-300">Contact</a></li>
+      </ul>
+    </div>
+  </header>
+
+  <main>
+    <section class="pt-36 pb-12 relative overflow-hidden">
+      <div class="absolute top-0 right-0 w-80 h-80 bg-accent/10 rounded-full blur-3xl pointer-events-none"></div>
+      <div class="max-w-6xl mx-auto px-6 relative z-10">
+        <p class="reveal text-xs font-medium text-accent tracking-widest uppercase mb-3">Portfolio</p>
+        <h1 class="reveal font-display font-bold text-5xl md:text-6xl text-zinc-900 dark:text-white leading-tight mb-4">All Projects</h1>
+        <p class="reveal text-lg text-zinc-500 dark:text-zinc-400 max-w-xl leading-relaxed mb-8">A complete look at my work across Videos, Photos, Livestream, Graphic design and Social Media Management.</p>
+        <div class="reveal flex flex-wrap gap-2">
+          <template x-for="f in filterOptions" :key="f.value">
+            <button
+              @click="filter = f.value"
+              :class="filter === f.value ? 'bg-accent text-white border-accent' : 'bg-white dark:bg-zinc-900 text-zinc-600 dark:text-zinc-400 border-zinc-200 dark:border-zinc-700 hover:border-accent'"
+              class="text-sm px-4 py-1.5 rounded-full border transition-colors"
+              x-text="f.label">
+            </button>
+          </template>
+        </div>
+      </div>
+    </section>
+
+    <section class="pb-24">
+      <div class="max-w-6xl mx-auto px-6">
+        <!--
+          CORRECTIF : on itere sur TOUS les projets, x-show + x-transition gerent
+          la visibilite de chaque carte. L'ancienne version utilisait x-for sur
+          filteredProjects (computed), ce qui forcait un re-render complet du DOM
+          a chaque changement de filtre — detruisant les classes .reveal et cachant
+          tout le contenu.
+        -->
+        <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+          <template x-for="p in allProjects" :key="p.id">
+            <div
+              x-show="filter === 'all' || p.category.includes(filter)"
+              x-transition:enter="transition ease-out duration-300"
+              x-transition:enter-start="opacity-0 scale-95 translate-y-2"
+              x-transition:enter-end="opacity-100 scale-100 translate-y-0"
+              x-transition:leave="transition ease-in duration-200"
+              x-transition:leave-start="opacity-100 scale-100"
+              x-transition:leave-end="opacity-0 scale-95">
+              <article class="project-card group h-full rounded-2xl overflow-hidden bg-white dark:bg-zinc-900 border border-zinc-100 dark:border-zinc-800 hover:border-accent transition-colors">
+                <a href="Assets/APE Thumbnail.jpg" class="block photo-frame w-full h-52" :href="p.url">
+                  <img src="Assets/APE Thumbnail.jpg" :src="p.img" :alt="p.title" loading="lazy"/>
+                </a>
+                <div class="p-6">
+                  <div class="flex flex-wrap gap-2 mb-3">
+                    <template x-for="tag in p.tags" :key="tag">
+                      <span class="text-xs px-2.5 py-1 rounded-full"
+                        :class="tag === p.categoryLabel ? 'bg-orange-50 dark:bg-zinc-800 text-accent border border-orange-200 dark:border-zinc-700' : 'bg-zinc-100 dark:bg-zinc-800 text-zinc-600 dark:text-zinc-400'"
+                        x-text="tag">Livestream</span>
+                    </template>
+                  </div>
+                  <a :href="p.url">
+                  <h3 class="font-display font-bold text-lg text-zinc-900 dark:text-white mb-2 group-hover:text-accent transition-colors" x-text="p.title"></h3>
+                  </a>
+                  <p class="text-sm text-zinc-500 dark:text-zinc-400 leading-relaxed mb-4" x-text="p.desc">Handled livestream production, event photography, and video coverage for Asia Padel Events. Produced engaging visual content that captured the excitement and highlights of the tournament.</p>
+                  <div class="flex items-center justify-between">
+                    <a :href="p.url" class="inline-flex items-center gap-1.5 text-sm font-medium text-zinc-900 dark:text-white nav-link">View project →</a>
+                    <span class="text-xs text-zinc-400" x-text="p.year"></span>
+                  </div>
+                </div>
+              </article>
+            </div>
+          </template>
+        </div>
+        <div x-show="visibleCount === 0" x-cloak class="text-center py-20">
+          <p class="text-zinc-400 text-sm">No projects in this category yet.</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="pb-24">
+      <div class="max-w-6xl mx-auto px-6">
+        <div class="bg-zinc-900 dark:bg-zinc-800 rounded-3xl p-10 md:p-14 text-center relative overflow-hidden">
+          <div class="absolute top-0 right-0 w-64 h-64 bg-accent/20 rounded-full blur-3xl pointer-events-none"></div>
+          <div class="absolute bottom-0 left-0 w-40 h-40 bg-accent/10 rounded-full blur-2xl pointer-events-none"></div>
+          <div class="relative z-10">
+            <p class="text-xs font-medium text-accent tracking-widest uppercase mb-4">Ready to start?</p>
+            <h2 class="font-display font-bold text-3xl md:text-4xl text-white mb-4">Want your project here?</h2>
+            <p class="text-zinc-400 max-w-md mx-auto mb-8">I'm available for new projects. Tell me about what you're building and let's see if we're a good fit.</p>
+            <a href="index.html#contact" class="inline-flex items-center gap-2 btn-primary bg-accent text-white font-medium px-8 py-3.5 rounded-full hover:bg-accent-light transition-colors">Start a project &rarr;</a>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="border-t border-zinc-100 dark:border-zinc-900">
+    <div class="max-w-6xl mx-auto px-6 py-8 flex flex-col sm:flex-row items-center justify-between gap-4">
+      <p class="text-sm text-zinc-400">&copy; <span id="year"></span> Eliott. All rights reserved.</p>
+      <p class="text-xs text-zinc-500">Built with Tailwind CSS &amp; Alpine.js</p>
+    </div>
+  </footer>
+
+  <script>
+    function projects() {
+      return {
+        dark: false,
+        scrolled: false,
+        mobileMenu: false,
+        filter: 'all',
+
+        filterOptions: [
+          { value: 'all',       label: 'All (9)' },
+          { value: 'Livestream',      label: 'Livestream' },
+          { value: 'Video',   label: 'Video' },
+          { value: 'AVP',    label: 'AVP' },
+          { value: 'Print', label: 'Print' },
+		  { value: 'Photo', label: 'Photo' },
+		  { value: 'Graphic Design', label: 'Graphic Design' },
+		  { value: 'Social Media Management', label: 'Social Media Management' },
+        ],
+
+        allProjects: [
+          { id:1,  title:'Asia Padel Events - Livestream, Photo & Video',  category:['Livestream','Photo','Video'],      categoryLabel:'Livestream',         tags:['Livestream','Photo','Video'],           year:'2026', desc:'Managed livestream, photo, and video coverage for Asia Padel Events. Captured key moments and highlights of the tournament.',   img: 'Assets/APE Thumbnail.jpg',  url: 'P-APE.html' },
+          { id:2,  title:'DOST - Handa Pilipinas (Phivolcs, MASID & ASTI)',    category:['AVP','Video'],    categoryLabel:'AVP', tags:['AVP','Video'], year:'2026', desc:'Produced AVP content for DOST’s Handa Pilipinas project. Created engaging visuals to communicate key programs and initiatives.',                              img: 'Assets/DOST Thumbnail.jpg',  url: 'P-DOST.html' },
+          { id:3,  title:'Brgy Salawag - Music Fest 2025 Livestream', category:'Livestream',    categoryLabel:'Livestream',       tags:['Livestream'],                year:'2025', desc:'Handled the livestream production for Brgy. Salawag Music Fest 2025. Delivered smooth, engaging coverage of the live event.',                      img: 'Assets/Salawag Music Fest 2025 Thumbnail.jpg',  url: 'case-study.html' },
+          { id:4,  title:'Pilipinas United 3x3 - Teaser Video & Photos',    category:['AVP','Video','Photo'],   categoryLabel:'AVP', tags:['AVP','Video','Photo'],         year:'2025', desc:'Produced teaser videos and captured event photos for Pilipinas United 3x3. Created engaging visuals to highlight the energy and excitement of the tournament.',                                      img: 'Assets/Pilipinas United 3x3 Thumbnail.jpg',  url: 'P-PUL.html' },
+          { id:5,  title:'Arija - Promotional Video & Product Shoot', category:['Video','Photo'],      categoryLabel:'Video',         tags:['Video','Photo'],           year:'2026', desc:'Produced promotional videos and product photography for Arija. Created clean, engaging visuals to showcase the brand and its products.',                img: 'Assets/Arija Thumbnail.jpg',  url: 'P-Arija.html' },
+          { id:6,  title:'PEAP 6th National Convention - Livefeed, Same-day-edit & Photo',     category:['Livestream','Photo','Video'], categoryLabel:'Livestream',   tags:['Livestream','Photo','Video'],               year:'2024', desc:'Handled livefeed production, same-day editing, and event photography for the PEAP 6th National Convention. Delivered timely, high-quality visuals throughout the event.',           img: 'Assets/PEAP Thumbnail.jpg',  url: 'P-PEAP.html' },
+          { id:7,  title:'Sangguniang Kabataan Cup 3.0 - Video Highlights & Photo',      category:['Video'],   categoryLabel:'Video', tags:['Video'],   year:'2022', desc:'Produced video highlights and captured event photography for Sangguniang Kabataan Cup 3.0. Captured the energy and key moments of the tournament.',                    img: 'Assets/Sangguniang Kabataan Cup 3.0 Thumbnail.jpg',  url: 'P-SK Cup 3.html' },
+          { id:8,  title:'SLCUAA 26th Season - Livestream',  category:'Livestream',    categoryLabel:'Livestream',       tags:['Livestream'],                  year:'2026', desc:'Handled livestream production for the SLCUAA 26th Season. Delivered smooth and engaging coverage of the games.',                                                img: 'Assets/SLCUAA 26th Season Thumbnail.jpg',  url: 'case-study.html' },
+          { id:9,  title:'Uncle Drew Sports Center - Logo Design & Intro',      category:['Graphic Design','Video'], categoryLabel:'Graphic Design',   tags:['Graphic Design','Video'],                year:'2024', desc:'Designed the official logo and animated intro for Uncle Drew Sports Center. Created a bold visual identity for the brand.',         img: 'Assets/Uncle drew Sports Center Logo Thumbnail.jpg',  url: 'case-study.html' },
+		  { id:10, title:'Skin Reborn Sunscreen - Video Ads',      category:['Video'], categoryLabel:'Video',   tags:['Video'],                year:'2024', desc:'Produced video advertisements for Skin Reborn Sunscreen. Created engaging visuals to promote the product and brand.',         img: 'Assets/Skin Reborn Thumbnail.jpg',  url: 'P-Skin Reborn.html' },
+          { id:11, title:'Casa Malana Video Ads & Pubmats',      category:['Video','Graphic Design'],  categoryLabel:'Video',   tags:['Video','Graphic Design'],               year:'2024', desc:'Created video ads and promotional materials for Casa Malana. Developed engaging visuals to promote the brand and its offerings.',         img: 'Assets/Casa Malana Thumbnail.jpg',  url: 'P-Casa Malana.html' },
+		  { id:12, title:'GENTLEHOMME Website - Graphic Design & Assets',      category:['Graphic Design'],  categoryLabel:'Graphic Design',   tags:['Graphic Design'],               year:'2024', desc:'Created graphic designs and visual assets for the GENTLEHOMME website. Developed clean visuals that complemented the brand’s identity.',         img: 'Assets/GENTLEHOMME Thumbnail.jpg',  url: 'P-GENTLEHOMME.html' },
+		  { id:13, title:'MOGCHS - RFID ID & Lanyard Template/Print',      category:['Print','Graphic Design'],  categoryLabel:'Print',   tags:['Print','Graphic Design'],              year:'2025', desc:'Designed RFID ID and lanyard templates for MOGCHS. Prepared the final designs for high-quality printing and production.',         img: 'Assets/MOGCHS ID Thumbnail.jpg',  url: 'case-study.html' },
+		  { id:14, title:'Youguard - MOGCHS RFID Inauguration Highlights Video & Photo',      category:['Video','Photo'],  categoryLabel:'Video',   tags:['Video','Photo'],              year:'2025', desc:'Produced event highlights video and photography for the MOGCHS RFID Inauguration. Captured key moments and highlights of the launch.',         img: 'Assets/MOGCHS RFID Inauguration Thumbnail.jpg',  url: 'P-Youguard.html' },
+		  { id:15, title:'Play Learn - Product Learning Videos & Photos',      category:['Video','Photo'],  categoryLabel:'Video',   tags:['Video','Photo'],              year:'2025', desc:'Produced product learning videos for Play Learn. Created clear and engaging visuals to support product understanding.',         img: 'Assets/Play Learn Thumbnail.jpg',  url: 'P-Play Learn.html' },
+		  { id:16, title:'CBL - Volleyball Semi-finals Teaser Video & Photo',      category:['Video','Photo'],  categoryLabel:'Video',   tags:['Video','Photo'],              year:'2024', desc:'Produced a teaser video and player photoshoot for the CBL Volleyball Semi-Finals. Created dynamic visuals to build excitement for the games.',         img: 'Assets/CBL Volleyball Semifinals Thumbnail.jpg',  url: 'P-CBL Volleyball.html' },
+		  { id:17, title:'Cavite Ballers League - Season Livestream Coverage',      category:['Livestream','Graphic Design'],  categoryLabel:'Livestream',   tags:['Livestream','Graphic Design'],             year:'2024', desc:'Handled livestream production for the Cavite Ballers League season. Delivered smooth and engaging coverage of the games.',         img: 'Assets/CBL Live Thumbnail.jpg',  url: 'case-study.html' },
+		  { id:18, title:'Cavite Ballers League - Photobooth Giveaway',      category:['Photo','Graphic Design','Print'],  categoryLabel:'Photo',   tags:['Photo','Graphic Design','Print'],             year:'2024', desc:'Designed and produced a photobooth experience for the Cavite Ballers League. Created engaging visuals and memorable photos for fans and players.',         img: 'Assets/CBL Photobooth Thumbnail.jpg',  url: 'P-CBL Photobooth.html' },
+		  { id:19, title:'Shai x Maurice Pre-wedding Save The Date & Photoshoot',      category:['Video','Photo'],  categoryLabel:'Video',   tags:['Video','Photo'],             year:'2022', desc:'Created a save-the-date video and captured pre-wedding photos for Shai and Maurice. Produced warm and memorable visuals to celebrate their story.',         img: 'Assets/Shai x Maurice Pre-wedding Thumbnail.jpg',  url: 'P-Shai x Maurice.html' },
+		  { id:20, title:'Allysa + Alex Wedding Highlights Video',      category:['Video'],  categoryLabel:'Video',   tags:['Video'],             year:'2023', desc:'Produced a wedding highlights video for Allysa and Alex. Captured their special moments in a heartfelt visual story.',         img: 'Assets/Allysa + Alex Wedding highlights video Thumbnail.jpg',  url: 'P-Allysa + Alex.html' },
+		  { id:21, title:'Angelito + Gaycel Wedding Highlights Video',      category:['Video'],  categoryLabel:'Video',   tags:['Video'],             year:'2023', desc:'Produced a wedding highlights video for Angelito and Gaycel. Captured their special moments and memories through a heartfelt visual story.',         img: 'Assets/Angelito + Gaycel Ann Wedding Thumbnail.jpg',  url: 'P-Angelito + Gaycel.html' },
+		  { id:22, title:'Everyday Volleyball - Livestream coverage & Media day Photoshoot',      category:['Livestream','Photo'],  categoryLabel:'Livestream',   tags:['Livestream','Photo'],             year:'2026', desc:'Handled livestream coverage and media day photography for Everyday Volleyball. Captured the energy of the games and players through dynamic visuals.',         img: 'Assets/Everyday Volleyball Thumbnail.jpg',  url: 'case-study.html' },
+		  { id:23, title:'3x3 Basketball Thailand - Uncle Drew Pilipinas Video Highhlights & Photo',      category:['Video','Photo'],  categoryLabel:'Video',   tags:['Video','Photo'],             year:'2025', desc:'Produced video highlights and event photography for Uncle Drew Pilipinas at 3x3 Basketball Thailand. Captured the action, energy, and key moments of the tournament.',         img: 'Assets/Uncle drew Pilipinas Thailand Thumbnail.jpg',  url: 'case-study.html' },
+		  { id:24, title:'Uncle Drew Sports Center - Exhibition Game Livestream',      category:['Livestream'],  categoryLabel:'Livestream',   tags:['Livestream'],             year:'2024', desc:'Handled livestream production for the Uncle Drew Sports Center exhibition game. Delivered smooth and engaging coverage of the event.',         img: 'Assets/UDSC Exhibition Game Thumbnail.jpg',  url: 'case-study.html' },
+		  { id:25, title:'Uncle Drew 1 Day League - Livestream & Highlights Video',      category:['Livestream', 'Video'],  categoryLabel:'Livestream',   tags:['Livestream', 'Video'],            year:'2025', desc:'Handled livestream production and highlights video for the Uncle Drew 1 Day League. Captured the action and key moments throughout the tournament.',         img: 'Assets/UD 1 Day Basketball League Thumbnail.jpg',  url: 'case-study.html' },
+		  { id:26, title:'Salawag Inter-Barangay - Media Day Photo & Video',      category:['Video','Photo'],  categoryLabel:'Video',   tags:['Video','Photo'],            year:'2024', desc:'Produced media day photos and videos for the Salawag Inter-Barangay event. Captured dynamic visuals of the teams and players.',         img: 'Assets/Salawag Inter-Baranggay 2024 Media Day Thumbnail.jpg',  url: 'P-Salawag Inter-barangay Mediaday.html' },
+		  { id:27, title:'De La Salle Lipa - Battle of the Champions Livestream Coverage',      category:['Livestream'],  categoryLabel:'Livestream',   tags:['Livestream'],            year:'2026', desc:'Handled livestream production for the De La Salle Lipa Battle of the Champions. Delivered smooth and engaging coverage of the games.',         img: 'Assets/DLSL Battle of the Champion Thumbnail.jpg',  url: 'case-study.html' },
+		  { id:28, title:'Innovative Control Basketball League - Photo Coverage',      category:['Photo'],  categoryLabel:'Photo',   tags:['Photo'],            year:'2025', desc:'Handled event photography for the Innovative Control Basketball League. Captured the action, players, and key moments throughout the games.',         img: 'Assets/Innovative Controls Basketball League Thumbnail.jpg',  url: 'case-study.html' },
+		  { id:29, title:'Uncle Drew Academy - Opening Video Ads & Pubmats',      category:['Video','Photo'],  categoryLabel:'Video',   tags:['Video','Photo'],            year:'2025', desc:'Created opening video ads and promotional materials for Uncle Drew Academy. Developed dynamic visuals to introduce and promote the academy.',         img: 'Assets/Uncle Drew Academy Thumbnail.jpg',  url: 'P-Uncle Drew Academy.html' },
+		  { id:30, title:'SK League 2023 - Photo Coverage',      category:['Photo'],  categoryLabel:'Photo',   tags:['Photo'],            year:'2023', desc:'Handled event photography for SK League 2023. Captured the action, players, and key moments throughout the games.',         img: 'Assets/SK League 2023 PhotoThumbnail.jpg',  url: 'P-SK League 2023.html' },
+		  { id:31, title:'Pilipinas United 3x3 League - Printing Giveaways',      category:['Print','Graphic Design'],  categoryLabel:'Print',   tags:['Print','Graphic Design'],           year:'2025', desc:'Designed and produced printed giveaways for the Pilipinas United 3x3 League. Created event materials that supported the league’s branding and engagement.',         img: 'Assets/Pilipinas United 3x3 League Giveaways Thumbnail.jpg',  url: 'case-study.html' },
+		  { id:32, title:'Uncle Drew Sports Center - Membership Card Printing',      category:['Print','Graphic Design'],  categoryLabel:'Print',   tags:['Print','Graphic Design'],           year:'2026', desc:'Designed and produced membership cards for Uncle Drew Sports Center. Created professional, branded materials for its members.',         img: 'Assets/Uncle Drew Sports Center Membership Card Thumbnail.jpg',  url: 'case-study.html' },
+		  { id:33, title:'The SM Store - Masquerade Party Photobooth',      category:['Print','Graphic Design','Photo'],  categoryLabel:'Print',   tags:['Print','Graphic Design','Photo'],           year:'2023', desc:'Created a photobooth setup for The SM Store’s Masquerade Party. Designed engaging visuals and memorable photo experiences for guests.',         img: 'Assets/SM Masquerade Party Thumbnail.jpg',  url: 'P-The SM Store.html' },
+		  { id:34, title:'DEPED National Employee Union - Livefeed & Same-Day-Edit',      category:['Livestream','Video'],  categoryLabel:'Livestream',   tags:['Livestream','Video'],           year:'2026', desc:'Handled livefeed production and same-day editing for the DepEd National Employee Union event. Delivered timely and engaging visuals throughout the program.',         img: 'Assets/DEPED National Employees Union Thumbnail.jpg',  url: 'P-NEU.html' },
+		  { id:35, title:'Briones Pest Control - 20th Anniversary Same-Day-Edit Video',      category:['Video'],  categoryLabel:'Video',   tags:['Video'],           year:'2024', desc:'Produced a same-day edit video for Briones Pest Control’s 20th Anniversary. Captured and edited the event’s key moments for immediate presentation.',         img: 'Assets/Briones Pest Control 20th Anniversary Thumbnail.jpg',  url: 'P-Briones pest control.html' },
+		  { id:36, title:'Pilipinas United 3x3 - Media Day Livestream Coverage',      category:['Livestream'],  categoryLabel:'Livestream',   tags:['Livestream'],           year:'2025', desc:'Handled livestream production for the Pilipinas United 3x3 Media Day. Delivered smooth and engaging coverage of the event.',         img: 'Assets/PUL Media day Thumbnail.jpg',  url: 'case-study.html' },
+		  { id:37, title:'Paliparan Elementary School - Lupang Hinirang AVP',      category:['Video'],  categoryLabel:'Video',   tags:['Video'],           year:'2022', desc:'Produced an AVP for Paliparan Elementary School’s Lupang Hinirang presentation. Created a respectful and engaging visual piece for the school.',         img: 'Assets/Paliparan Elementary School - Lupang Hinirang AVP Thumbnail.jpg',  url: 'P-PES.html' },
+		  { id:38, title:'Sarina & Andrew - Gender Reveal Video',      category:['Video'],  categoryLabel:'Video',   tags:['Video'],           year:'2025', desc:'Produced a gender reveal video for Sarina & Andrew. Captured the excitement and memorable moments of their special celebration.',         img: 'Assets/Sarina & Andrew - Gender Reveal Thumbnail.jpg',  url: 'P-Sarina & Andrew Gender Reveal.html' },
+		  { id:39, title:'Sunset View Dive Resort - Promotional Video ads',      category:['Video'],  categoryLabel:'Video',   tags:['Video'],           year:'2025', desc:'Produced promotional video ads for Sunset View Dive Resort. Created engaging visuals to showcase the resort and its diving experience.',         img: 'Assets/Sunset View Dive Resort Thumbnail.jpg',  url: 'P-Sunset View dive resort.html' },
+		  { id:40, title:'SK Salawag - Medical Mission 2022 Video Highlights & Photo ',      category:['Video', 'Photo'],  categoryLabel:'Video',   tags:['Video','Photo'],           year:'2022', desc:'Produced video highlights and event photography for the SK Salawag Medical Mission 2022. Captured key moments of the community outreach program.',         img: 'Assets/SK Medical Mission 2022 Thumbnail.jpg',  url: 'P-SK Medical Mission 2022.html' },
+		  { id:41, title:'SK Salawag - Linggo ng Kabataan 2024 Video Highlights',      category:['Video'],  categoryLabel:'Video',   tags:['Video'],           year:'2024', desc:'Produced video highlights for SK Salawag’s Linggo ng Kabataan 2024. Captured the energy and memorable moments of the celebration.',         img: 'Assets/SK Linggo ng Kabataan 2024 Thumbnail.jpg',  url: 'P-SK Linggo ng kabataan 2024.html' },
+		  { id:42, title:'SK Salawag - Blessing & distribution of Negocart Video & Photo',      category:['Video', 'Photo'],  categoryLabel:'Video',   tags:['Video', 'Photo'],         year:'2024', desc:'Produced video and photography coverage for the Negocart blessing and distribution. Captured key moments of the community livelihood initiative.',         img: 'Assets/SK Nego cart Thumbnail.jpg',  url: 'P-SK Nego cart.html' },
+		  { id:43, title:'SK Salawag - Ginoo at Binibining Salawag 2022 Video highlights & Photo',      category:['Video', 'Photo'],  categoryLabel:'Video',   tags:['Video', 'Photo'],         year:'2022', desc:'Produced video highlights and event photography for Ginoo at Binibining Salawag 2022. Captured the energy and memorable moments of the event.',         img: 'Assets/SK Ginoo at binibining Salawag 2022 Thumbnail.jpg',  url: 'P-SK Ginoo at Binibining Salawag.html' },
+		  { id:44, title:'SK Salawag - Sayaw Kabataan Video highlights',      category:['Video'],  categoryLabel:'Video',   tags:['Video'],         year:'2023', desc:'Produced video highlights for SK Salawag’s Sayaw Kabataan event. Captured the energy and vibrant moments of the celebration.',         img: 'Assets/SK Sayaw kabataan Thumbnail.jpg',  url: 'P-SK Sayaw Kabataan.html' },
+		  { id:45, title:'SK Salawag - Dental & Hygene Kits outgiving Video Highlights',      category:['Video'],  categoryLabel:'Video',   tags:['Video'],         year:'2023', desc:'Produced video highlights for the SK Salawag Dental & Hygiene Kits Giveaway. Captured key moments of the community outreach initiative.',         img: 'Assets/SK Dental & Hygene kits Thumbnail.jpg',  url: 'P-SK Dental and Hygene kits.html' },
+		  { id:46, title:'SK Salawag - Siklistang Kabataan Video Highlights & Photos',      category:['Video', 'Photo'],  categoryLabel:'Video',   tags:['Video', 'Photo'],        year:'2023', desc:'Produced video highlights and photography for SK Salawag’s Siklistang Kabataan. Captured the energy and memorable moments of the cycling event.',         img: 'Assets/Siklistang Kabataan Thumbnail.jpg',  url: 'P-SK Siklistang Kabataan.html' },
+		  { id:47, title:'SK Salawag - Salawag Riders club Video Highlights',      category:['Video'],  categoryLabel:'Video',   tags:['Video'],       year:'2023', desc:'Produced video highlights for the SK Salawag Riders Club. Captured the energy and key moments of the riders’ event.',         img: 'Assets/SK Salawag Riders club Thumbnail.jpg',  url: 'P-SK Salawag Riders Club.html' },
+		  { id:48, title:'SK Salawag - Silid Karunungan Video Highlights',      category:['Video'],  categoryLabel:'Video',   tags:['Video'],       year:'2022', desc:'Produced video highlights for SK Salawag’s Silid Karunungan program. Captured key moments of the educational initiative.',         img: 'Assets/Silid Karunungan Thumbnail.jpg',  url: 'P-SK Silid Karunungan.html' },
+		  { id:49, title:'SK Salawag - Aquaflask Giveaway Video Highlights',      category:['Video'],  categoryLabel:'Video',   tags:['Video'],       year:'2022', desc:'Produced video highlights for the SK Salawag Aquaflask Giveaway. Captured key moments of the community initiative and distribution.',         img: 'Assets/SK Aquaflask Giveaway Thumbnail.jpg',  url: 'P-SK Aquaflask Giveaway.html' },
+		  { id:50, title:'SK Salawag - Para sa kabataan, Galing sa kabataan Video Highlights',      category:['Video'],  categoryLabel:'Video',   tags:['Video'],       year:'2022', desc:'Produced video highlights for SK Salawag’s “Para sa Kabataan, Galing sa Kabataan” program. Captured key moments that showcased youth involvement and community engagement.',         img: 'Assets/Para sa kabataan, Galing sa kabataan Thumbnail.jpg',  url: 'P-SK Para sa kabataan, Galing sa kabataan.html' },
+		  { id:51, title:'SK Salawag - Sama-samang Kumikilos Video AVP',      category:['Video','AVP'],  categoryLabel:'Video',   tags:['Video','AVP'],       year:'2022', desc:'Produced an AVP for SK Salawag’s “Sama-samang Kumikilos” program. Created a concise visual presentation highlighting the program’s initiatives and community efforts.',         img: 'Assets/Sama-samang Kumikilos Thumbnail.jpg',  url: 'P-SK Sama-samang Kumikilos.html' },
+		  { id:52, title:'Julia Studio Photoshoot',      category:['Photo'],  categoryLabel:'Photo',   tags:['Photo'],       year:'2026', desc:'Handled a studio photoshoot for Julia. Created clean and polished portraits with a professional visual style.',         img: 'Assets/Julia Photoshoot Thumbnail.jpg',  url: 'P-Julia Photoshoot.html' },
+		  { id:53, title:'Dianne 18th birthday Studio Photoshoot',      category:['Photo'],  categoryLabel:'Photo',   tags:['Photo'],       year:'2026', desc:'Handled a studio photoshoot for Dianne’s 18th birthday. Captured elegant and memorable portraits to celebrate the occasion.',         img: 'Assets/Dianne 18th birthday Thumbnail.jpg',  url: 'P-Dianne 18th birthday Studio Photoshoot.html' },
+		  { id:54, title:'Rotary Club - Unite for goods Photo Coverage',      category:['Photo'],  categoryLabel:'Photo',   tags:['Photo'],       year:'2025', desc:'Handled event photography for the Rotary Club’s “Unite for Goods” initiative. Captured key moments of the event and community activities.',         img: 'Assets/Rotary Club - Unite for goods Thumbnail.jpg',  url: 'P-Rotary Club.html' },
+		  { id:55, title:'RUP Security Agency - Video Ads',      category:['Video'],  categoryLabel:'Video',   tags:['Video'],       year:'2022', desc:'Produced video advertisements for RUP Security Agency. Created professional visuals to promote the agency and its services.',         img: 'Assets/RUP Security Agency Thumbnail.jpg',  url: 'P-RUP.html' },
+		  { id:56, title:'Harry Roque - Maisug Rally Video Highlights',      category:['Video'],  categoryLabel:'Video',   tags:['Video'],       year:'2022', desc:'Produced video highlights for the Maisug Rally. Captured key moments and atmosphere of the event through engaging visuals.',         img: 'Assets/Harry Roque Maisug rally Thumbnail.jpg',  url: 'P-Harry Roque.html' },
+		  { id:57, title:'LEADS Environmental Health - Video SDE & Photoman',      category:['Video','Print'],  categoryLabel:'Video',   tags:['Video','Print'],       year:'2025', desc:'Handled same-day edit video production and event photography for LEADS Environmental Health. Captured and delivered key moments of the event.',         img: 'Assets/LEADS Environmental Health Thumbnail.jpg',  url: 'P-LEADS.html' },
+		  { id:58, title:'Basketball Grind - Facebook page Management',      category:['Social Media Management'],  categoryLabel:'Social Media Management',   tags:['Social Media Management'],       year:'2025', desc:'Handled same-day edit video production and event photography for LEADS Environmental Health. Captured and delivered key moments of the event.',         img: 'Assets/Basketball Grind Thumbnail.jpg',  url: 'https://www.facebook.com/BasketballGrindph' },
+		  { id:59, title:'Giliw - Facebook page Management',      category:['Social Media Management'],  categoryLabel:'Social Media Management',   tags:['Social Media Management'],       year:'2025', desc:'Handled same-day edit video production and event photography for LEADS Environmental Health. Captured and delivered key moments of the event.',         img: 'Assets/Giliw Thumbnail.jpg',  url: 'https://www.facebook.com/GiliwPhilippines' },
+		  { id:60, title:'Kwento mo sa pagong - Facebook page Management',      category:['Social Media Management'],  categoryLabel:'Social Media Management',   tags:['Social Media Management'],       year:'2025', desc:'Handled same-day edit video production and event photography for LEADS Environmental Health. Captured and delivered key moments of the event.',         img: 'Assets/Kwento mo sa pagong Thumbnail.jpg',  url: 'https://www.facebook.com/profile.php?id=61556718680849' },
+		  { id:61, title:'The Believers - Facebook page Management',      category:['Social Media Management'],  categoryLabel:'Social Media Management',   tags:['Social Media Management'],       year:'2025', desc:'Handled same-day edit video production and event photography for LEADS Environmental Health. Captured and delivered key moments of the event.',         img: 'Assets/The Believers Thumbnail.jpg',  url: 'https://www.facebook.com/eleven.eleven.wishers' },
+		  { id:62, title:'Uncle drew Pilipinas - Facebook page Management',      category:['Social Media Management'],  categoryLabel:'Social Media Management',   tags:['Social Media Management'],       year:'2025', desc:'Handled same-day edit video production and event photography for LEADS Environmental Health. Captured and delivered key moments of the event.',         img: 'Assets/Uncle drew Pilipinas Thumbnail.jpg',  url: 'https://www.facebook.com/uncledrewpilipinas' },
+		  { id:63, title:'Learnhub - Facebook page Management',      category:['Social Media Management'],  categoryLabel:'Social Media Management',   tags:['Social Media Management'],       year:'2025', desc:'Handled same-day edit video production and event photography for LEADS Environmental Health. Captured and delivered key moments of the event.',         img: 'Assets/Learnhub Thumbnail.jpg',  url: 'https://www.facebook.com/learnhubtv' },
+		
+		
+		],
+
+get visibleCount() {
+    if (this.filter === 'all') return this.allProjects.length;
+    return this.allProjects.filter(p => p.category.includes(this.filter)).length;
+},
+
+        init() {
+          this.dark = localStorage.getItem('theme') === 'dark'
+            || (!localStorage.getItem('theme') && window.matchMedia('(prefers-color-scheme: dark)').matches);
+
+          window.addEventListener('scroll', () => {
+            this.scrolled = window.scrollY > 20;
+          }, { passive: true });
+
+          this.$nextTick(() => {
+            const obs = new IntersectionObserver(entries => {
+              entries.forEach(e => {
+                if (e.isIntersecting) {
+                  e.target.classList.add('visible');
+                  obs.unobserve(e.target);
+                }
+              });
+            }, { threshold: 0.08, rootMargin: '0px 0px -30px 0px' });
+            document.querySelectorAll('.reveal').forEach(el => obs.observe(el));
+          });
+        }
+      }
+    }
+
+    document.getElementById('year').textContent = new Date().getFullYear();
+  </script>
+</body>
+</html>
